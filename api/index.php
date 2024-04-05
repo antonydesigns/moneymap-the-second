@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "INSERT INTO `transactions` (`acc_id`, `change`) VALUES(:account_id, :change)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':account_id', $data->acc_id);
-        $stmt->bindParam(':change', $data->add);
+        $stmt->bindParam(':change', $data->num);
         if ($stmt->execute()) {
             $response = ['status' => 1, 'message' => 'Record created successfully.'];
         } else {

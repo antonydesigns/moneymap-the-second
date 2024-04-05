@@ -48,9 +48,17 @@ const store = create((set) => ({
   // warnings
   warn: {
     overdraft: false,
-    empty_input_add: true,
+    empty: true,
+    zero: false,
   },
   setWarn: (data) => set((state) => ({ warn: { ...state.warn, ...data } })),
+
+  // messages / info
+
+  info: {
+    finalBalance: "",
+  },
+  setInfo: (data) => set((state) => ({ info: { ...state.info, ...data } })),
 }));
 
 export default store;

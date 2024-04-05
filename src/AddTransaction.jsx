@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import axios from "axios";
 import store from "./store";
+import numberInputStore from "./store";
 import { sortBy } from "lodash";
+import NumberInput from "./NumberInput";
 
 function AddTransaction() {
   const { domainName } = store();
@@ -11,7 +13,7 @@ function AddTransaction() {
   const { afterBalance, setAfterBalance } = store();
   const { balances, setBalances } = store();
   const { selected, setSelected } = store();
-  const { add, setAdd } = store();
+  const { num } = numberInputStore();
   const { addAccountON, setAddAccountON } = store();
   const { newAccount, setNewAccount } = store();
   const { stateChange, setStateChange } = store();
@@ -112,27 +114,23 @@ function AddTransaction() {
     setAddAccountON(!addAccountON);
     setNewAccount("");
     setStateChange(!stateChange);
+    console.log(response);
   }
 
-  // Money "Change" field
-
-  function handleChange(e) {
-    setAdd(input);
-  }
   // Submit form
   async function handleSubmit(e) {
     e.preventDefault();
 
     // reset inputs
     setSelected("");
-    setAdd("");
 
     // send to API via axios
-    await axios.post(url, {
+    const response = await axios.post(url, {
       acc_id: selected,
-      add: add,
+      add: num,
       meta: "input",
     });
+    console.log(response);
     setStateChange(!stateChange);
   }
 
@@ -199,23 +197,12 @@ function AddTransaction() {
             <p>
               <strong>Add:</strong>
             </p>
-            <input type="text" name="add" value={add} onChange={handleChange} />
-            {/*  <InputNumber value={add} name="add" onChange={setAdd} /> */}
+            <NumberInput />
             <br />
             <br />
             <button type="submit" onClick={handleSubmit}>
               Submit
             </button>
-            {warn.overdraft && (
-              <span style={{ color: "red", paddingLeft: "10px" }}>
-                Your balance will be negative. Try withdrawing less :)
-              </span>
-            )}
-            {!warn.overdraft && add != "" && typeof add === "number" && (
-              <span style={{ paddingLeft: "10px" }}>
-                Your final balance will be {afterBalance}.
-              </span>
-            )}
           </>
         )}
       </form>
