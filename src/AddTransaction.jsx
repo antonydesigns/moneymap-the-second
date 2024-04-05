@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import axios from "axios";
 import store from "./store";
 import { sortBy } from "lodash";
-import InputNumber from "react-input-number";
 
 function AddTransaction() {
   const { domainName } = store();
@@ -118,42 +117,8 @@ function AddTransaction() {
   // Money "Change" field
 
   function handleChange(e) {
-    const input = e.target.value;
-    const pattern = /^-?\d+(\.\d{1,5})?$/;
-
-    if (!pattern.test(input)) return;
-
-    if (input.trim() === "") {
-      setWarn({ empty_input_add: true });
-    } else {
-      setWarn({ empty_input_add: false });
-    }
-
     setAdd(input);
   }
-
-  useEffect(() => {
-    //console.log(warn);
-  }, [add]);
-
-  // useEffect(() => {
-  //   console.log(add);
-
-  //   if (add === "") {
-  //     setWarn({ empty_input_add: true });
-  //   } else {
-  //     setWarn({ empty_input_add: false });
-  //   }
-
-  //   const result = parseFloat(currentBalance) + add;
-  //   setAfterBalance(result);
-  //   if (result < 0) {
-  //     setWarn({ overdraft: true });
-  //   } else {
-  //     setWarn({ overdraft: false });
-  //   }
-  // }, [add]);
-
   // Submit form
   async function handleSubmit(e) {
     e.preventDefault();
@@ -238,11 +203,7 @@ function AddTransaction() {
             {/*  <InputNumber value={add} name="add" onChange={setAdd} /> */}
             <br />
             <br />
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              disabled={warn.overdraft || warn.empty_input_add}
-            >
+            <button type="submit" onClick={handleSubmit}>
               Submit
             </button>
             {warn.overdraft && (
