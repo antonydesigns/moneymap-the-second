@@ -8,7 +8,7 @@ $allowed_origins = [
 if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed_origins)) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Headers: *');
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH');
+    header('Access-Control-Allow-Methods: POST');
 }
 
 include 'DbConnect.php';
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "INSERT INTO `transactions` (`acc_id`, `change`) VALUES(:account_id, :change)";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':account_id', $data->acc_id);
-        $stmt->bindParam(':change', $data->num);
+        $stmt->bindParam(':change', $data->add);
         if ($stmt->execute()) {
             $response = ['status' => 1, 'message' => 'Record created successfully.'];
         } else {
