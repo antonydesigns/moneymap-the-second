@@ -89,23 +89,43 @@ function AddTransaction() {
   }
 
   // Money "Change" field
-  useEffect(() => {
-    console.log(add);
 
-    if (add === "") {
+  function handleChange(e) {
+    const input = e.target.value;
+    const pattern = /^-?\d+(\.\d{1,5})?$/;
+
+    if (!pattern.test(input)) return;
+
+    if (input.trim() === "") {
       setWarn({ empty_input_add: true });
     } else {
       setWarn({ empty_input_add: false });
     }
 
-    const result = parseFloat(currentBalance) + add;
-    setAfterBalance(result);
-    if (result < 0) {
-      setWarn({ overdraft: true });
-    } else {
-      setWarn({ overdraft: false });
-    }
+    setAdd(input);
+  }
+
+  useEffect(() => {
+    //console.log(warn);
   }, [add]);
+
+  // useEffect(() => {
+  //   console.log(add);
+
+  //   if (add === "") {
+  //     setWarn({ empty_input_add: true });
+  //   } else {
+  //     setWarn({ empty_input_add: false });
+  //   }
+
+  //   const result = parseFloat(currentBalance) + add;
+  //   setAfterBalance(result);
+  //   if (result < 0) {
+  //     setWarn({ overdraft: true });
+  //   } else {
+  //     setWarn({ overdraft: false });
+  //   }
+  // }, [add]);
 
   // Submit form
   async function handleSubmit(e) {
@@ -187,19 +207,14 @@ function AddTransaction() {
             <p>
               <strong>Add:</strong>
             </p>
-            {/*             <input
-              type="number"
-              name="add"
-              value={add}
-              onChange={handleChange}
-            /> */}
-            <InputNumber value={add} name="add" onChange={setAdd} />
+            <input type="text" name="add" value={add} onChange={handleChange} />
+            {/*  <InputNumber value={add} name="add" onChange={setAdd} /> */}
             <br />
             <br />
             <button
               type="submit"
               onClick={handleSubmit}
-              disabled={Object.values(warn).some((value) => value)}
+              disabled={warn.overdraft || warn.empty_input_add}
             >
               Submit
             </button>
