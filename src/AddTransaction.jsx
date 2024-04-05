@@ -4,7 +4,13 @@ import store from "./store";
 import numberInputStore from "./numberInput.store";
 import { sortBy } from "lodash";
 import NumberInput from "./NumberInput";
-import { countDecimalPlaces } from "./utils";
+import {
+  loadAccountNames,
+  loadAccountBalances,
+  renameAccountIDs,
+  prettifyAccountBalances,
+  countDecimalPlaces,
+} from "./accountBalance.logic";
 
 function AddTransaction() {
   const { domainName } = store();
@@ -32,45 +38,48 @@ function AddTransaction() {
     setRawBalances(response.data);
   }
 
-  async function renameAccounts() {
-    // map out acc_id to its accountName
-    const accountNames = accounts.reduce((map, obj) => {
-      map[obj.acc_id] = obj.account;
-      return map;
-    }, {});
+  // async function renameAccounts() {
+  //   // map out acc_id to its accountName
+  //   const accountNames = accounts.reduce((map, obj) => {
+  //     map[obj.acc_id] = obj.account;
+  //     return map;
+  //   }, {});
 
-    // for each transaction, add the accountName assoc with acc_id
-    const balances = rawBalances.map((bal) => {
-      const account = accountNames[bal.acc_id];
-      const balance = parseFloat(bal.balance);
+  //   // for each transaction, add the accountName associated with acc_id
+  //   const balances = rawBalances.map((bal) => {
+  //     const account = accountNames[bal.acc_id];
+  //     const balance = parseFloat(bal.balance);
 
-      // truncate trailing zeroes in the balance
-      const decimalPlace = countDecimalPlaces(bal.balance);
-      return {
-        ...bal,
-        account: account || null,
-        balance: balance.toFixed(decimalPlace),
-      };
-    });
-    const balances_sorted = sortBy(balances, "account");
-    setBalances(balances_sorted);
-  }
+  //     // truncate trailing zeroes in the balance
+  //     const decimalPlace = countDecimalPlaces(bal.balance);
+  //     return {
+  //       ...bal,
+  //       account: account || null,
+  //       balance: balance.toFixed(decimalPlace),
+  //     };
+  //   });
+  //   const balances_sorted = sortBy(balances, "account");
+  //   setBalances(balances_sorted);
+  // }
 
   useEffect(() => {
-    loadAccounts();
-    loadCheckBalances();
-    renameAccounts();
+    loadAccountNames();
+    loadAccountBalances();
   }, []);
 
   useEffect(() => {
-    loadAccounts();
-    loadCheckBalances();
-    renameAccounts();
-  }, [stateChange]); // Whenever a marked state changes.
+    renameAccountIDs();
+  }, [rawBalances, accounts]);
 
   useEffect(() => {
-    renameAccounts();
-  }, [rawBalances, accounts]);
+    // logic.prettifyAccountBalances();
+  }, [balances]);
+
+  // useEffect(() => {
+  //   loadAccounts();
+  //   loadCheckBalances();
+  //   renameAccounts();
+  // }, [stateChange]); // Whenever a marked state changes.
 
   // Prepare url for axios
   const url = "http://" + domainName + "/api/";
