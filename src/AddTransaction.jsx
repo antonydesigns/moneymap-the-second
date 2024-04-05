@@ -128,7 +128,7 @@ function AddTransaction() {
     <>
       <form onSubmit={handleSubmit}>
         <p>
-          <strong>Account:</strong>
+          <strong>Account: adsdsdasdsdsadadsdasd</strong>
         </p>
         {!addAccountON && (
           <>
