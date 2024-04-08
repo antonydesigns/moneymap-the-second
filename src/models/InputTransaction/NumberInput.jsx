@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import inputStore from "./numberInput.store";
-import globalStore from "./store";
+import inputStore from "./store";
+import globalStore from "../../store";
 
 function NumberInput() {
   const { num, setNum } = inputStore();

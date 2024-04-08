@@ -14,7 +14,6 @@
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-input-number": "^5.0.19",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

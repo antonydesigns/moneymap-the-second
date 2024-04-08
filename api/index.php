@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if ($data->meta == "check_balances") {
+    if ($data->meta == "load_raw_balances") {
         $sql = "SELECT `acc_id`,sum(`change`) as `balance` FROM `transactions` GROUP BY `acc_id`";
         $stmt = $conn->prepare($sql);
         if ($stmt->execute()) {

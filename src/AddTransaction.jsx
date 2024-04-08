@@ -3,7 +3,7 @@ import axios from "axios";
 import store from "./store";
 import numberInputStore from "./store";
 import { sortBy } from "lodash";
-import NumberInput from "./NumberInput";
+import NumberInput from "./models/InputTransaction/NumberInput";
 
 function AddTransaction() {
   const { domainName } = store();
@@ -75,6 +75,7 @@ function AddTransaction() {
   }
 
   useEffect(() => {
+    test();
     loadAccounts();
     loadCheckBalances();
     renameAccounts();
