@@ -10,12 +10,14 @@ export default class Logic {
   handleInput(e) {
     const input = e.target.value;
 
+    // Disables text
     const pattern =
       /^-?$|^-?0$|^-?0\.$|^-?[1-9]+$|^-?[1-9][0-9]+$|^-?[1-9]+\.$|^-?[1-9]+\.[0-9]{1,5}$|^-?0\.[0-9]{1,5}$/;
     if (pattern.test(input)) {
       setNum(input);
     }
 
+    // Actual validation
     const zeroPattern = /^-?0\.0+$|^-?0\.$|^-?0$|^-?[1-9]+\.$/;
     if (zeroPattern.test(input)) {
       setWarn({ zero: true });
