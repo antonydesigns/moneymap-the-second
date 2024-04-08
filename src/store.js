@@ -47,6 +47,7 @@ const store = create((set) => ({
 
   // warnings
   warn: {
+    noAccount: true,
     overdraft: false,
     empty: true,
     zero: false,

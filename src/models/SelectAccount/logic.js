@@ -21,11 +21,21 @@ export default class Logic {
 
     this.addAccountField = store((s) => s.addAccountField);
     this.setAddAccountField = store((s) => s.setAddAccountField);
+
+    this.setWarn = global((s) => s.setWarn);
   }
 
   accountSelection(e) {
-    this.setSelected(e.target.value);
-    const account = balances.find((obj) => obj.acc_id == e.target.value);
+    const selected = e.target.value;
+
+    if (selected == "") {
+      this.setWarn({ noAccount: true });
+    } else {
+      this.setWarn({ noAccount: false });
+    }
+
+    this.setSelected(selected);
+    const account = balances?.find((obj) => obj.acc_id == selected);
     this.setCurrentBalance(account.balance);
   }
 
