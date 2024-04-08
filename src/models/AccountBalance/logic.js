@@ -1,36 +1,35 @@
 import store from "./store";
-import sitewide from "../../store";
+import global from "../../store";
 import axios from "axios";
+import { sortBy } from "lodash";
 
 export default class Logic {
   constructor() {
-    this.domain = sitewide((s) => s.domainName);
+    this.domain = global((s) => s.domainName);
     this.url = "http://" + this.domain + "/api/";
-    this.accounts = store((s) => s.accounts);
+    this.accounts;
     this.setAccounts = store((s) => s.setAccounts);
-
-    this.rawBalances = store((s) => s.rawBalances);
-    this.setRawBalances = store((s) => s.setRawBalances);
-
-    this.balances = store((s) => s.balances);
+    this.rawBalances;
     this.setBalances = store((s) => s.setBalances);
   }
 
-  run() {
-    this.loadAllAccounts();
-    this.loadAccountBalances();
-    this.renameAccounts();
+  async run() {
+    await this.loadAllAccounts();
+    await this.loadAccountBalances();
+    await this.renameAccounts();
   }
 
   async loadAllAccounts() {
-    const response = await axios.post(url, { meta: "load_accounts" });
+    const response = await axios.post(this.url, { meta: "load_accounts" });
     const accounts = response.data;
+    this.accounts = accounts;
     this.setAccounts(accounts);
   }
 
   async loadAccountBalances() {
-    const response = await axios.post(url, { meta: "check_balances" });
-    this.setRawBalances(response.data);
+    const response = await axios.post(this.url, { meta: "load_raw_balances" });
+    this.rawBalances = response.data;
+    // console.log(response.data);
   }
 
   countDecimalPlaces(number) {
@@ -52,13 +51,13 @@ export default class Logic {
 
   async renameAccounts() {
     // map out acc_id to its accountName
-    const accountNames = this.accounts.reduce((map, obj) => {
+    const accountNames = await this.accounts?.reduce((map, obj) => {
       map[obj.acc_id] = obj.account;
       return map;
     }, {});
 
     // for each record, add the accountName associated with acc_id
-    const balances = this.rawBalances.map((item) => {
+    const balances = await this.rawBalances?.map((item) => {
       const account = accountNames[item.acc_id];
       const balance = parseFloat(item.balance);
 

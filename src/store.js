@@ -42,8 +42,8 @@ const store = create((set) => ({
   setBalances: (data) => set({ balances: data }),
 
   // general state change indicator
-  stateChange: true,
-  setStateChange: (data) => set({ stateChange: data }),
+  submission: true,
+  setSubmission: (data) => set({ submission: data }),
 
   // warnings
   warn: {
